@@ -8,12 +8,13 @@
 
 	version="5.0">
 
-	<title>Eclipse SCADA</title>
+	<title>Eclipse NeoSCADA</title>
 	<subtitle>The definite guide</subtitle>
 
 	<info>
 		<copyright>
 			<year>2015</year>
+			<year>2017</year>
 			<holder>Jens Reimann</holder>
             <holder>Jürgen Rose</holder>
 		</copyright>
@@ -46,7 +47,7 @@
 		</authorgroup>
 
 		<cover>
-			<para role="tagline">Explaining the Eclipse SCADA system</para>
+			<para role="tagline">Explaining the Eclipse NeoSCADA system</para>
 			<mediaobject role="cover">
 				<imageobject condition="web">
 					<imagedata fileref="images/cover.png" />

@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xsi:schemaLocation="http://docbook.org/ns/docbook http://docbook.org/xml/5.0/xsd/docbook.xsd"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Generator</title>
+
+  <para>Generators generates the configuration for the Master and the Driver
+  with the help of Factories. The result can be serialized to a JSON format
+  and packed as a debian file. </para>
+
+  <programlisting>    final List&lt;Properties&gt; assetProperties = collectProperties ();
+    generateDriverConfig ( assetProperties );
+    generateMasterConfig ( assetProperties );</programlisting>
+
+  <section>
+    <title>Generate Master config</title>
+
+    <para>Create the configuration for Master Item and package it.</para>
+
+    <programlisting language="java">    createSingleMasterConfig ( getOutputDir (), masterSubDir, properties );
+    packageSingleMasterConfig ( masterSubDir, properties );</programlisting>
+  </section>
+
+  <section>
+    <title>Generate Driver config</title>
+
+    <para>Based on the defined protocol generated the memry types and block
+    requests.</para>
+
+    <para>For example(modbus):</para>
+
+    <programlisting language="java">    generateModbusMemoryTypes ( cfg, properties );
+    generateModbusBlockRequests ( cfg, properties );</programlisting>
+  </section>
+
+  <section>
+    <title>Modbus memory types</title>
+
+    <para>Memory types has a map of string and string to add the Variable name
+    and the Memory type.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Data type</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>DOUBLE</para>
+          </listitem>
+
+          <listitem>
+            <para>INT16</para>
+          </listitem>
+
+          <listitem>
+            <para>SHORT</para>
+          </listitem>
+
+          <listitem>
+            <para>UINT16</para>
+          </listitem>
+
+          <listitem>
+            <para>WORD</para>
+          </listitem>
+
+          <listitem>
+            <para>INT32</para>
+          </listitem>
+
+          <listitem>
+            <para>UINT32</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Index</para>
+      </listitem>
+
+      <listitem>
+        <para>Length</para>
+      </listitem>
+
+      <listitem>
+        <para>Byte order</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Big Endian</para>
+          </listitem>
+
+          <listitem>
+            <para>Little Endian</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>For example:</para>
+
+    <programlisting language="java">    final Map&lt;String, String&gt; memoryMap = new TreeMap&lt;&gt; ();
+    memoryMap.put ( "dataPoint.Active", "UINT16:6:0:BIG_ENDIAN" );</programlisting>
+  </section>
+
+  <section>
+    <title>Modbus Block Request</title>
+
+    <para>Hold Modbus block definition in a map of strings.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Block Type</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>COIL</para>
+          </listitem>
+
+          <listitem>
+            <para>DISCRETE</para>
+          </listitem>
+
+          <listitem>
+            <para>HOLDING</para>
+          </listitem>
+
+          <listitem>
+            <para>INPUT</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Start register</para>
+      </listitem>
+
+      <listitem>
+        <para>Number of registers</para>
+      </listitem>
+
+      <listitem>
+        <para>Period</para>
+      </listitem>
+
+      <listitem>
+        <para>Timeout</para>
+      </listitem>
+
+      <listitem>
+        <para>Name</para>
+      </listitem>
+
+      <listitem>
+        <para>Asset</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>For example:</para>
+
+    <programlisting language="java">     final Map&lt;String, String&gt; blocks = new TreeMap&lt;&gt; ();
+     blocks.put ("block.CU100011", "HOLDING:0:8:3000:30000:STANDARDASSET:PLANT1" );</programlisting>
+  </section>
+
+  <section>
+    <title>Factories</title>
+
+    <para>Factories are used add different type of elements to the
+    configuration.</para>
+
+    <para><table>
+        <title>List of Factories</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Factory name</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>DATA SOURCE DATA ITEM FACTORY</entry>
+
+              <entry>da.datasource.dataitem</entry>
+            </row>
+
+            <row>
+              <entry>HISTORICAL ITEM FACTORY</entry>
+
+              <entry>historical.item.factory</entry>
+            </row>
+
+            <row>
+              <entry>IEC 60870 CONNECTION FACTORY</entry>
+
+              <entry>org.openscada.da.server.iec60870.connection</entry>
+            </row>
+
+            <row>
+              <entry>IEC 60870 EXPORTER FACTORY</entry>
+
+              <entry>org.openscada.da.server.exporter.iec60870.device</entry>
+            </row>
+
+            <row>
+              <entry>MODBUS EXPORTER FACTORY</entry>
+
+              <entry>org.openscada.da.server.exporter.modbus.device</entry>
+            </row>
+
+            <row>
+              <entry>REST EXPORTER FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.server.exporter.rest.context</entry>
+            </row>
+
+            <row>
+              <entry>OPCXMLDA CONNECTION FACTORY</entry>
+
+              <entry>org.openscada.da.server.opc.xmlda.server</entry>
+            </row>
+
+            <row>
+              <entry>MASTER ITEM FACTORY</entry>
+
+              <entry>master.item</entry>
+            </row>
+
+            <row>
+              <entry>CONSTANT ITEM FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.datasource.constant</entry>
+            </row>
+
+            <row>
+              <entry>PERSISTENT ITEM FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.datasource.ds</entry>
+            </row>
+
+            <row>
+              <entry>TRANSIENT ITEM FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.datasource.memory</entry>
+            </row>
+
+            <row>
+              <entry>SCRIPT ITEM FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.datasource.script</entry>
+            </row>
+
+            <row>
+              <entry>DATA ITEM DATA SOURCE FACTORY</entry>
+
+              <entry>da.dataitem.datasource</entry>
+            </row>
+
+            <row>
+              <entry>SCRIPT ITEM FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.scale.input"</entry>
+            </row>
+
+            <row>
+              <entry>SCALE HANDLER FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.scale.input</entry>
+            </row>
+
+            <row>
+              <entry>MANUAL HANDLER FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.manual</entry>
+            </row>
+
+            <row>
+              <entry>ITEM SUMMARY HANDLER FACTORY</entry>
+
+              <entry>da.master.handler.sum</entry>
+            </row>
+
+            <row>
+              <entry>MODBUS MASTER DEVICE FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.server.osgi.modbus.masterDevice</entry>
+            </row>
+
+            <row>
+              <entry>MODBUS SLAVE DEVICE FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.server.osgi.modbus.slaveDevice</entry>
+            </row>
+
+            <row>
+              <entry>MEMORY TYPES FACTORY</entry>
+
+              <entry>org.eclipse.scada.da.server.common.memory.types</entry>
+            </row>
+
+            <row>
+              <entry>SEC OSGI MANAGER FACTORY</entry>
+
+              <entry>org.eclipse.scada.sec.osgi.manager</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table></para>
+  </section>
+
+  <section>
+    <title>Modbus master factory element</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Host</para>
+      </listitem>
+
+      <listitem>
+        <para>Port</para>
+      </listitem>
+
+      <listitem>
+        <para>Read Timeout</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Modbus slave factory element</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Master Id</para>
+      </listitem>
+
+      <listitem>
+        <para>Slave Id</para>
+      </listitem>
+
+      <listitem>
+        <para>Data Order</para>
+      </listitem>
+
+      <listitem>
+        <para>Map of Blocks</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</section>

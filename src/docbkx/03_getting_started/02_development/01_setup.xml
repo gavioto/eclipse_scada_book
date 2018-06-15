@@ -10,10 +10,10 @@
 
 	<para>
 		The following sub section explain in brief detail on how to setup
-		a development environment. Eclipse SCADA is developed using the
+		a development environment. Eclipse NeoSCADA is developed using the
 		Eclipse Java
 		IDE (JDT), still it possible to use other IDEs and
-		development environments as well in order to use Eclipse SCADA in your
+		development environments as well in order to use Eclipse NeoSCADA in your
 		own applications.
 	</para>
 
@@ -26,7 +26,7 @@
 		<title>Setting up a plain maven project</title>
 
 		<para>
-			Eclipse SCADA is built using Eclipse Tycho. It is a set maven
+			Eclipse NeoSCADA is built using Eclipse Tycho. It is a set maven
 			plugins, which extend maven in a way that the Eclipse PDE type
 			projects can be used without much additional changes for maven.
 		</para>
@@ -34,7 +34,7 @@
 		<para>
 			This works extremely well in the Eclipse PDE enviroment, but if
 			you want to develop a plain maven project you would need to import the
-			artifacts manually, and Eclipse SCADA has a lot
+			artifacts manually, and Eclipse NeoSCADA has a lot
 			<footnote>
 				<para>A the moment of writing it is over 400 OSGi bundles/JAR files.</para>
 			</footnote>
@@ -50,74 +50,22 @@
 		</para>
 
 		<para>
-			Dependencies to external projects, also the dependencies to Eclipse
+			Dependencies to external projects, e.g. the dependencies to Eclipse
 			Orbit, are replaced with their Maven Central counterparts (as long as
-			they have some). These artifacts are also excluded from the mirror process and
-			<emphasis>not</emphasis> served from
-			<link xlink:href="http://download.eclipse.org">download.eclipse.org</link>
-			.
+			they have some).
 		</para>
 
 		<para>
-			The URI to the maven 2 repositories contains the build id. So there
-			is no <quote>composite</quote> maven repository at the moment.
+			Since Eclipse NeoSCADA 0.3, the generated maven artifacts for all milestones and releases
+			are available via maven central under the groupId: <filename>org.eclipse.neoscada.[repo]</filename>.
 		</para>
 
 		<para>
-			The URI is:
-			<filename>http://download.eclipse.org/eclipsescada/downloads/org.eclipse.scada/drops/[version]/[buildId]/maven/</filename>
-		</para>
-
-		<variablelist>
-			<varlistentry>
-				<term>version</term>
-				<listitem>
-					<para>The main version (e.g. 0.2.0)</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>buildId</term>
-				<listitem>
-					<para>The ID of the build (e.g. R201501260629)</para>
-				</listitem>
-			</varlistentry>
-		</variablelist>
-
-		<para>
-			So in order to use
-			<quote>0.2.0</quote>
-			using plain maven, adding the following repository setup will do:
-
-			<programlisting language="xml"><![CDATA[...
-<repository>
-  <id>eclipse.scada</id>
-  <url>http://download.eclipse.org/eclipsescada/downloads/org.eclipse.scada/drops/0.2.0/R201501260629/maven/</url>
-  <releases>
-    <enabled>true</enabled>
-  </releases>
-</repository>
-...]]></programlisting>
-
-			<note><title>Nightly builds</title>
-				<para>
-					If you reference a nightly build (N), the versions will be
-					<quote>-SNAPSHOT</quote>
-					versions and you will need to also enable snapshots
-					for the repository.
-				</para>
-                <para>Only the two most recent nightly builds well be kept. Therefore
-                linking to a nightly release might not be a good idea since it might
-                be gone pretty soon.</para>
-			</note>
-
-		</para>
-
-		<para>
-			Eclipse SCADA uses Apache Mina for most of its communication
+			Eclipse NeoSCADA uses Apache Mina for most of its communication
 			protocols. Apache Mina uses the maven plugin
 			<filename>org.apache.felix:maven-bundle-plugin</filename>
 			for providing OSGi bundles. So as soon as you declare a dependency to
-			some Eclipse SCADA module which has a dependency to Apache Mina, you
+			some Eclipse NeoSCADA module which has a dependency to Apache Mina, you
 			will need to add this plugin to you setup as well.
 		</para>
 
